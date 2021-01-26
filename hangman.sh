@@ -14,6 +14,7 @@ declare endText;
 declare underscores;
 alphabet=("a" "b" "c" "d" "e" "f" "g" "h" "i" "j" "k" "l" "m" "n" "o" "p" "q" "r" "s" "t" "u" "v" "w" "x" "y" "z")
 declare -A rightArray
+declare -A wrongArray
 
 function getRandomWord {
     i=$(( $RANDOM % ${#words[@]} + 1 ))
@@ -37,7 +38,11 @@ function lost {
 
 function renderGameView {
     clear
-    echo "$try tries left!"
+    if [[ $try -ne 1 ]]; then
+        echo "$try tries left!"
+    else
+        echo "Last try!"
+    fi
     underscores=""
     for (( i=0; i<${#word}; i++ )); do
         char=${word:$i:1}
@@ -72,7 +77,7 @@ while true; do
             echo  -e "\e[31mWrong Input\e[0m"
                 wait;
             continue
-        elif [[ ${rightArray["$Playerinput"]} ]]; then
+        elif [[ ${rightArray["$Playerinput"]} ]] || [[ ${wrongArray["$Playerinput"]} ]] ; then
             echo  -e "\e[31mCharacter already guessed\e[0m"   
                 wait;         
         else
@@ -80,13 +85,14 @@ while true; do
             for (( i=0; i<${#word}; i++ )); do
                 char=${word:$i:1}
                 if [[ $char == $Playerinput ]]; then
-                    rightArray["$char"]=1
+                    rightArray["$char"]=$char
                     right=$((right+1))
                     wrong=false
                 fi
             done
             if $wrong; then
                 try=$((try-1))
+                wrongArray["$Playerinput"]=$Playerinput
                 if [[ $try -ne 0 ]]; then
                     echo -e "\e[31mWrong! $try tries left\e[0m"
                     wait;
@@ -113,4 +119,5 @@ while true; do
         esac
     done
     rightArray=()
+    wrongArray=()
 done
