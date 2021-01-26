@@ -43,6 +43,9 @@ function renderGameView {
     else
         echo "Last try!"
     fi
+    if [[ ${wrongArray[*]} != "" ]]; then
+    echo "Wrongly guessed: ${wrongArray[*]}"
+    fi
     underscores=""
     for (( i=0; i<${#word}; i++ )); do
         char=${word:$i:1}
