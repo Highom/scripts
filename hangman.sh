@@ -37,7 +37,6 @@ function lost {
 
 function renderGameView {
     clear
-    echo $word
     echo "$try tries left!"
     underscores=""
     for (( i=0; i<${#word}; i++ )); do
@@ -49,6 +48,10 @@ function renderGameView {
         fi
     done
     echo $underscores
+}
+
+function wait {
+    sleep 0.5;
 }
 
 #Main Loop
@@ -67,7 +70,11 @@ while true; do
         fi
         if [[ ${#Playerinput} -ne 1 ]] || ! [[ "${alphabet[*]}" =~ $Playerinput ]]; then
             echo  -e "\e[31mWrong Input\e[0m"
+                wait;
             continue
+        elif [[ ${rightArray["$Playerinput"]} ]]; then
+            echo  -e "\e[31mCharacter already guessed\e[0m"   
+                wait;         
         else
             wrong=true
             for (( i=0; i<${#word}; i++ )); do
@@ -82,7 +89,7 @@ while true; do
                 try=$((try-1))
                 if [[ $try -ne 0 ]]; then
                     echo -e "\e[31mWrong! $try tries left\e[0m"
-                    sleep 0.5;
+                    wait;
                 fi
             fi
         fi
