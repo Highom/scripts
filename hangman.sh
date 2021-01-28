@@ -12,7 +12,6 @@ readarray words < hangman.dat
 declare word;
 declare endText;
 declare underscores;
-alphabet=("a" "b" "c" "d" "e" "f" "g" "h" "i" "j" "k" "l" "m" "n" "o" "p" "q" "r" "s" "t" "u" "v" "w" "x" "y" "z")
 declare -A rightArray
 declare -A wrongArray
 
@@ -59,8 +58,11 @@ function renderGameView {
 }
 
 function wait {
-    sleep 0.5;
+    sleep 0.4;
 }
+
+#remove cursor
+tput civis
 
 #Main Loop
 while true; do
@@ -76,13 +78,14 @@ while true; do
             won;
             break;
         fi
-        if [[ ${#Playerinput} -ne 1 ]] || ! [[ "${alphabet[*]}" =~ $Playerinput ]]; then
+        if [[ ${#Playerinput} -ne 1 ]] || ! [[ $Playerinput =~ [a-z] ]]; then
             echo  -e "\e[31mWrong Input\e[0m"
-                wait;
+            wait;
             continue
         elif [[ ${rightArray["$Playerinput"]} ]] || [[ ${wrongArray["$Playerinput"]} ]] ; then
             echo  -e "\e[31mCharacter already guessed\e[0m"   
-                wait;         
+            wait;
+            continue
         else
             wrong=true
             for (( i=0; i<${#word}; i++ )); do
@@ -110,8 +113,6 @@ while true; do
             won;
             break
         fi
-
-        # echo ${alphabet[*]}
     done
     while true; do
         read -p "$endText" yn
