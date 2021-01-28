@@ -43,7 +43,7 @@ function renderGameView {
         echo "Last try!"
     fi
     if [[ ${wrongArray[*]} != "" ]]; then
-    echo "Wrongly guessed: ${wrongArray[*]}"
+        echo "Wrongly guessed: ${wrongArray[*]}"
     fi
     underscores=""
     for (( i=0; i<${#word}; i++ )); do
@@ -118,10 +118,11 @@ while true; do
         read -p "$endText" yn
         case $yn in
             [Yy]* ) break; break;;
-            [Nn]* )clear; exit;;
+            [Nn]* )clear; tput cnorm; exit;;
             * ) echo -e "\e[31mPlease answer yes or no.\e[0m";
         esac
     done
+    #reset right and wrong Array for next Game
     rightArray=()
     wrongArray=()
 done
