@@ -23,38 +23,38 @@ function getRandomWord {
 
 function won {
     clear
-    echo "You won!"
-    echo "Word was $word"
+    echo -e "\e[1;32mYou won!\e[0m"
+    echo -e "Word was \e[36m$word\e[0m"
     endText="You won! Try again? [y/n]: "
 }
 
 function lost {
     clear
-    echo "GAME OVER"
-    echo "Word was $word"
+    echo -e "\e[1;31mGAME OVER\e[0m"
+    echo -e "Word was \e[36m$word\e[0m"
     endText="You lost! Try again? [y/n]: "
 }
 
 function renderGameView {
     clear
     if [[ $try -ne 1 ]]; then
-        echo "$try tries left!"
+        echo -e "\e[35m$try\e[0m tries left!"
     else
-        echo "Last try!"
+        echo -e "\e[1;31mLast try!\e[0m"
     fi
     if [[ ${wrongArray[*]} != "" ]]; then
-        echo "Wrongly guessed: ${wrongArray[*]}"
+        echo -e "\e[1;31mWrongly guessed:\e[0m ${wrongArray[*]}"
     fi
     underscores=""
     for (( i=0; i<${#word}; i++ )); do
         char=${word:$i:1}
         if [[ ${rightArray["$char"]} ]]; then
-            underscores+=" $char"
+            underscores+=" \e[1;36m$char\e[0m"
         else
-            underscores+=" -"
+            underscores+=" \e[1m-\e[0m"
         fi
     done
-    echo $underscores
+    echo -e "$underscores"
 }
 
 function wait {
